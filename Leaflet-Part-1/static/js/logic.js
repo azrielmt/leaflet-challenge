@@ -79,6 +79,9 @@ d3.json(url).then(function(data) {
     legend.addTo(myMap);
 });
 
+
+// Inital code below, did not work for legend.
+
 // var legend = L.control( {position: "bottomright"});
 
 // legend.onAdd = function() {
@@ -86,8 +89,7 @@ d3.json(url).then(function(data) {
 //   depth = [-10, 10, 30, 50, 70, 90]; 
 //     for (var i = 0; i < depth.length; i++) {
 //         div.innerHTML +=
-//             '<i style="background:' + colors[i] + '"></i> ' +
-//             labels[i] + '<br>';
+//             '<i style="background:' + mapColor[i] + '"></i> ' + depth[i] + '<br>';
 //     }
 //   return div;
 // };
