@@ -1,8 +1,8 @@
-const url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson";
+const url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 var myMap = L.map("map", {
     center: [37, -95],
-    zoom: 4
+    zoom: 5
 });
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -16,18 +16,18 @@ d3.json(url).then(function(data) {
         if (Magnitude === 0) {
             return 1;
         }
-        return Magnitude * 3;
+        return Magnitude * 5;
     }
 
     // Function for the style of the circles
     function mapStyles(feature) {
         return {
             color: "black",
-            fillColor: mapColors(feature.geometry.coordinates[2]),
+            fillColor: mapColor(feature.geometry.coordinates[2]),
             radius: mapRadius(feature.properties.Magnitude),
             fillOpacity: 1,
+            weight: 1,
             stroke: true,
-            weight: 1
         }
     }
 
@@ -42,20 +42,20 @@ d3.json(url).then(function(data) {
     }).addTo(myMap);
 
         // Map circle colors
-        function mapColors(circledepth) {
-            if (circledepth < 10) {
+        function mapColor(circledepth) {
+            if (circledepth <= 10) {
                 return '#90EE90'
             } 
-            else if (circledepth < 30) {
+            else if (circledepth <= 30) {
                 return '#FFD700'
             } 
-            else if (circledepth < 50) {
+            else if (circledepth <= 50) {
                 return '#FFFF00'
             } 
-            else if (circledepth < 70) {
+            else if (circledepth <= 70) {
                 return '#FFA500'
             } 
-            else if (circledepth < 90) {
+            else if (circledepth <= 90) {
                 return '#ff4500'
             } 
             else {
@@ -65,17 +65,31 @@ d3.json(url).then(function(data) {
 
     // Legend
 
-    var legend = L.control( {
-        position: "bottomright"
-    });
+    var legend = L.control( {position: "bottomright"});
 
     legend.onAdd = function() {
       var div = L.DomUtil.create("div", "info legend"),
-      depth = [-10, 10, 30, 50, 70, 90];  
+      depth = [-10, 10, 30, 50, 70, 90];
+    //   var labels = [-10, 10, 30, 50, 70, 90];  
       for (var i = 0; i < depth.length; i++) {
-        div.innerHTML += '<i style="background:' + mapColors(depth[i] + 1) + '"></i> ' + depth[i] + (depth[i + 1] ? '&ndash;' + depth[i + 1] + '<br>' : '+');
+        div.innerHTML += '<i style="background:' + mapColor(depth[i] + 1) + '"></i> ' + depth[i] + (depth[i + 1] ? '&ndash;' + depth[i + 1] + '<br>' : '+');
       }
       return div;
     };
     legend.addTo(myMap);
 });
+
+// var legend = L.control( {position: "bottomright"});
+
+// legend.onAdd = function() {
+//   var div = L.DomUtil.create("div", "info legend"),
+//   depth = [-10, 10, 30, 50, 70, 90]; 
+//     for (var i = 0; i < depth.length; i++) {
+//         div.innerHTML +=
+//             '<i style="background:' + colors[i] + '"></i> ' +
+//             labels[i] + '<br>';
+//     }
+//   return div;
+// };
+// legend.addTo(myMap);
+// });
